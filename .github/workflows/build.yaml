@@ -18,12 +18,14 @@ jobs:
           
       - name: Check for new commits
         id: check_commit
-        run: echo "latest_commit=$latest_commit" >> $GITHUB_ENV
+        run: gh variable set LAST_COMMIT_HASH --body "$latest_commit"
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
         continue-on-error: true
       
       - name: Compare with last commit hash
         env:
-          commitHash: ${{ secrets.LAST_COMMIT_HASH }}
+          commitHash: ${{ vars.LAST_COMMIT_HASH }}
         if: env.latest_commit != ${{ env.commitHash }}
         run: |
           echo "New commit found: Building Skia..."
@@ -31,7 +33,7 @@ jobs:
         
       - name: Save new commit hash
         env:
-          commitHash: ${{ secrets.LAST_COMMIT_HASH }}
+          commitHash: ${{ vars.LAST_COMMIT_HASH }}
         if: env.latest_commit != ${{ env.commitHash }}
         run: echo "LAST_COMMIT_HASH=$latest_commit" | tee -a $GITHUB_ENV
       
