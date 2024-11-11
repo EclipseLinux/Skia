@@ -25,18 +25,10 @@ jobs:
           echo "LAST_COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
       
       - name: Compare with last commit hash
-        env:
-          commitHash: ${{ vars.LAST_COMMIT_HASH }}
-        if: env.latest_commit != ${{ env.commitHash }}
+        if: env.latest_commit != ${{ env.LAST_COMMIT_HASH }}
         run: |
           echo "New commit found: Building Skia..."
           # Add build steps here, such as `./tools/build_script`
-        
-      - name: Save new commit hash
-        env:
-          commitHash: ${{ vars.LAST_COMMIT_HASH }}
-        if: env.latest_commit != ${{ env.commitHash }}
-        run: echo "LAST_COMMIT_HASH=$latest_commit" | tee -a $GITHUB_ENV
       
       - name: Release binaries
         if: success()
