@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Clone Skia repo
         run: |
-          git clone --depth 1 https://github.com/google/skia.git
+          git clone https://skia.googlesource.com/skia.git
           cd skia
       
       - name: Fetch dependencies
