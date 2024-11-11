@@ -24,7 +24,7 @@ jobs:
       - name: Compare with last commit hash
         env:
           commitHash: ${{ secrets.LAST_COMMIT_HASH }}
-        if: env.latest_commit != ${{ commitHash }}
+        if: env.latest_commit != ${{ env.commitHash }}
         run: |
           echo "New commit found: Building Skia..."
           # Add build steps here, such as `./tools/build_script`
@@ -32,7 +32,7 @@ jobs:
       - name: Save new commit hash
         env:
           commitHash: ${{ secrets.LAST_COMMIT_HASH }}
-        if: env.latest_commit != ${{ commitHash }}
+        if: env.latest_commit != ${{ env.commitHash }}
         run: echo "LAST_COMMIT_HASH=$latest_commit" | tee -a $GITHUB_ENV
       
       - name: Release binaries
