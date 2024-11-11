@@ -14,6 +14,9 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
     steps:
+      - name: Install Ninja
+        run: sudo apt-get install ninja
+        
       - name: Clone Skia repo
         run: |
           git clone https://skia.googlesource.com/skia.git
@@ -28,7 +31,7 @@ jobs:
         working-directory: skia
 
       - name: Build
-        run: find . -name "ninja" && third_party/ninja -C out/Shared && strip -s out/Shared/*.so && strip -g out/Shared/*.so && strip --strip-unneeded out/Shared/*.so
+        run: ninja -C out/Shared && strip -s out/Shared/*.so && strip -g out/Shared/*.so && strip --strip-unneeded out/Shared/*.so
         working-directory: skia
       
       - name: Configure binaries
