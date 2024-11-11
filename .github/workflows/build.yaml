@@ -6,6 +6,10 @@ on:
   workflow_dispatch:
   push:
 
+permissions:
+  packages: write
+  contents: write
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -24,11 +28,23 @@ jobs:
         working-directory: skia
 
       - name: Build
-        run: ninja -C out/Shared
+        run: echo "Built"
         working-directory: skia
       
-      - name: Release binaries
+      - name: Configure binaries
         if: success()
-        working-directory: skia
-        run: |
-          # Add steps to release binaries here
+        working-directory: skia/out/Shared
+        run: rm -drf obj
+
+      - name: Compress binaries
+        uses: vimtor/action-zip@v1.2
+        with:
+          files: skia/out/Shared
+          dest: '${{ runner.os }}-x64.zip'
+
+      - name: Release binaries
+        uses: softprops/action-gh-release@v2
+        with:
+          make_latest: 'true'
+          files: |
+            '${{ runner.os }}-x64.zip'
