@@ -3,6 +3,8 @@ name: Build Skia on Update
 on:
   schedule:
     - cron: '0 * * * *'  # Runs hourly
+  workflow_dispatch:
+  push:
 
 jobs:
   build-and-release:
