@@ -15,7 +15,10 @@ jobs:
           git clone --depth 1 https://github.com/google/skia.git
           cd skia
           echo "latest_commit=$(git rev-parse HEAD)" >> $GITHUB_ENV
-          
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Check for new commits
         id: check_commit
         run: gh variable set LAST_COMMIT_HASH --body "$latest_commit"
