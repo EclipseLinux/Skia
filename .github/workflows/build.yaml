@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Ninja
-        run: sudo apt-get update && sudo apt-get install ninja-build clang
+        run: sudo apt-get update && sudo apt-get install ninja-build clang llvm-dev
         
       - name: Clone Skia repo
         run: |
