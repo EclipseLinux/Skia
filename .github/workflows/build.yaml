@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Ninja
-        run: sudo apt-get update && sudo apt-get install ninja-build
+        run: sudo apt-get update && sudo apt-get install ninja-build build-essential
         
       - name: Clone Skia repo
         run: |
