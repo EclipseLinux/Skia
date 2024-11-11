@@ -22,14 +22,7 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/google/skia.git
           cd skia
-          echo "latest_commit=$(git rev-parse HEAD)" >> $GITHUB_ENV
-
-      - name: Check for new commits
-        id: check_commit
-        run: gh variable set LAST_COMMIT_HASH --body "$latest_commit"
-        env:
-          GH_TOKEN: ${{ secrets.PAT }}
-        continue-on-error: true
+          echo "LAST_COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
       
       - name: Compare with last commit hash
         env:
