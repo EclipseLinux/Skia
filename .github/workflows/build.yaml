@@ -1,0 +1,35 @@
+name: Build Skia on Update
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs hourly
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Skia repo
+        run: |
+          git clone --depth 1 https://github.com/google/skia.git
+          cd skia
+          latest_commit=$(git rev-parse HEAD)
+          
+      - name: Check for new commits
+        id: check_commit
+        run: echo "latest_commit=$latest_commit" >> $GITHUB_ENV
+        continue-on-error: true
+      
+      - name: Compare with last commit hash
+        if: env.latest_commit != ${{ secrets.LAST_COMMIT_HASH }}
+        run: |
+          echo "New commit found: Building Skia..."
+          # Add build steps here, such as `./tools/build_script`
+        
+      - name: Save new commit hash
+        if: env.latest_commit != ${{ secrets.LAST_COMMIT_HASH }}
+        run: echo "LAST_COMMIT_HASH=$latest_commit" | tee -a $GITHUB_ENV
+      
+      - name: Release binaries
+        if: success()
+        run: |
+          # Add steps to release binaries here
