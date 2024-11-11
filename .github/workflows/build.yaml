@@ -22,13 +22,14 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/google/skia.git
           cd skia
-          echo "LAST_COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          echo "latest_commit=$(git rev-parse HEAD)" >> $GITHUB_ENV
       
       - name: Compare with last commit hash
         if: env.latest_commit != ${{ env.LAST_COMMIT_HASH }}
         run: |
           echo "New commit found: Building Skia..."
           # Add build steps here, such as `./tools/build_script`
+          echo "LAST_COMMIT_HASH=$latest_commit" >> $GITHUB_ENV
       
       - name: Release binaries
         if: success()
@@ -39,4 +40,4 @@ jobs:
         uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           variables: |
-            LAST_COMMIT_HASH=${{ env.LAST_COMMIT_HASH }}
+            LAST_COMMIT_HASH=${{ env.latest_commit }}
