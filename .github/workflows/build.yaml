@@ -10,14 +10,15 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Import variable
-        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
+      - name: Download File
+        uses: actions/download-artifact@v2
         with:
-          # List all variables you want to retrieve from the store
-          # XXX They'll be automatically added to your ENV
-          variables: |
-            LAST_COMMIT_HASH
-            
+          name: env
+
+      - name: Import env
+        run: ./env.sh
+        continue-on-error: true
+          
       - name: Clone Skia repo
         run: |
           git clone --depth 1 https://github.com/google/skia.git
@@ -29,15 +30,16 @@ jobs:
         run: |
           echo "New commit found: Building Skia..."
           # Add build steps here, such as `./tools/build_script`
-          echo "LAST_COMMIT_HASH=$latest_commit" >> $GITHUB_ENV
+          echo "echo LAST_COMMIT_HASH=$latest_commit >> $GITHUB_ENV" >> env.sh
+          ./env.sh
       
       - name: Release binaries
         if: success()
         run: |
           # Add steps to release binaries here
 
-      - name: Export variables for next jobs
-        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
+      - name: Upload File
+        uses: actions/upload-artifact@v2
         with:
-          variables: |
-            LAST_COMMIT_HASH=${{ env.latest_commit }}
+          name: env
+          path: env.sh
