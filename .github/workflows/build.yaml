@@ -14,6 +14,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: env
+        continue-on-error: true
 
       - name: Import env
         run: ./env.sh
