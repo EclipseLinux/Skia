@@ -28,7 +28,7 @@ jobs:
         working-directory: skia
 
       - name: Build
-        run: ninja -C out/Shared && strip -s out/Shared/*.so && strip -g out/Shared/*.so && strip --strip-unneeded out/Shared/*.so
+        run: bin/ninja -C out/Shared && strip -s out/Shared/*.so && strip -g out/Shared/*.so && strip --strip-unneeded out/Shared/*.so
         working-directory: skia
       
       - name: Configure binaries
