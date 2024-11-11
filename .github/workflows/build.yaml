@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Ninja
-        run: sudo apt-get update && sudo apt-get install ninja-build build-essential
+        run: sudo apt-get update && sudo apt-get install ninja-build clang
         
       - name: Clone Skia repo
         run: |
@@ -31,7 +31,7 @@ jobs:
         working-directory: skia
 
       - name: Build
-        run: ninja -C out/Shared
+        run: C=clang CXX=clang++ ninja -C out/Shared
         working-directory: skia
 
       - name: Strip builds
