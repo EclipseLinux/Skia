@@ -32,7 +32,7 @@ jobs:
           echo "New commit found: Building Skia..."
           # Add build steps here, such as `./tools/build_script`
           echo "echo LAST_COMMIT_HASH=$latest_commit >> $GITHUB_ENV" >> env.sh
-          ./env.sh
+          chmod +x env.sh && ./env.sh
       
       - name: Release binaries
         if: success()
