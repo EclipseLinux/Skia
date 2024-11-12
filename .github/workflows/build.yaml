@@ -36,12 +36,12 @@ jobs:
 
       - name: Strip builds
         run: strip -s out/Shared/*.so && strip -g out/Shared/*.so && strip --strip-unneeded out/Shared/*.so
-        working-directory: skia de
+        working-directory: skia
       
       - name: Configure binaries
         if: success()
         working-directory: skia/out/Shared
-        run: rm -drf obj && echo "DATE=$(date '+%d.%m.%Y.%H%M%S')" >> $GITHUB_ENV
+        run: rm -drf obj gcc_like_host && echo "DATE=$(date '+%d.%m.%Y.%H%M%S')" >> $GITHUB_ENV
 
       - name: Compress binaries
         uses: vimtor/action-zip@v1.2
