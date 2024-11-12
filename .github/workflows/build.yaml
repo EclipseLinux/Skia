@@ -61,4 +61,5 @@ jobs:
           make_latest: 'true'
           tag_name: ${{ env.DATE }}
           files: |
-            skia-${{ runner.os }}-x64.zip skia-includes.zip
+            skia-${{ runner.os }}-x64.zip 
+            skia-includes.zip
