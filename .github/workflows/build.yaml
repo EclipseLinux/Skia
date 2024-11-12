@@ -21,6 +21,12 @@ jobs:
         run: |
           git clone https://skia.googlesource.com/skia.git
           cd skia && g++-14 --version && ld --version
+
+      - name: Packaging includes
+        uses: vimtor/action-zip@v1.2
+        with:
+          files: skia/include
+          dest: 'skia-includes.zip'
       
       - name: Fetch dependencies
         run: python3 tools/git-sync-deps && python3 bin/fetch-ninja && python3 bin/fetch-gn
@@ -47,7 +53,7 @@ jobs:
         uses: vimtor/action-zip@v1.2
         with:
           files: skia/out/Shared
-          dest: '${{ runner.os }}-x64.zip'
+          dest: 'skia-${{ runner.os }}-x64.zip'
 
       - name: Release binaries
         uses: softprops/action-gh-release@v2
@@ -56,3 +62,4 @@ jobs:
           tag_name: ${{ env.DATE }}
           files: |
             ${{ runner.os }}-x64.zip
+            skia-includes.zip
