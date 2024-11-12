@@ -20,7 +20,7 @@ jobs:
       - name: Clone Skia repo
         run: |
           git clone https://skia.googlesource.com/skia.git
-          cd skia && gcc-14 --version && ld --version
+          cd skia && g++-14 --version && ld --version
       
       - name: Fetch dependencies
         run: python3 tools/git-sync-deps && python3 bin/fetch-ninja && python3 bin/fetch-gn
