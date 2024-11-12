@@ -47,7 +47,7 @@ jobs:
       - name: Configure binaries
         if: success()
         working-directory: skia/out/Shared
-        run: rm -drf obj gcc_like_host && echo "DATE=$(date '+%d.%m.%Y.%H%M%S')" >> $GITHUB_ENV
+        run: rm -drf obj gcc_like_host && echo "DATE=$(date '+%d.%m.%Y')" >> $GITHUB_ENV
 
       - name: Compress binaries
         uses: vimtor/action-zip@v1.2
@@ -61,5 +61,4 @@ jobs:
           make_latest: 'true'
           tag_name: ${{ env.DATE }}
           files: |
-            ${{ runner.os }}-x64.zip
-            skia-includes.zip
+            skia-${{ runner.os }}-x64.zip skia-includes.zip
