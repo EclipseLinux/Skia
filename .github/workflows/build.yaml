@@ -36,7 +36,7 @@ jobs:
 
       - name: Strip builds
         run: strip -s out/Shared/*.so && strip -g out/Shared/*.so && strip --strip-unneeded out/Shared/*.so
-        working-directory: skia
+        working-directory: skia de
       
       - name: Configure binaries
         if: success()
