@@ -20,18 +20,18 @@ jobs:
       - name: Clone Skia repo
         run: |
           git clone https://skia.googlesource.com/skia.git
-          cd skia
+          cd skia && cc --version
       
       - name: Fetch dependencies
         run: python3 tools/git-sync-deps && python3 bin/fetch-ninja && python3 bin/fetch-gn
         working-directory: skia
 
       - name: Configure Skia
-        run: bin/gn gen out/Shared --args='ar = "ar" cc = "clang" cxx = "clang++" target_link="ld.lld" host_link="ld.lld" extra_cflags = ["-ffunction-sections", "-fdata-sections", "-fno-rtti", "-flto", "-Oz"] extra_ldflags=["-Wl,--gc-sections"]is_component_build=true is_debug=false is_official_build=true paragraph_gms_enabled=false skia_use_system_harfbuzz=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false paragraph_tests_enabled=false skia_canvaskit_enable_alias_font=false skia_canvaskit_enable_canvas_bindings=false skia_canvaskit_enable_effects_deserialization=false skia_canvaskit_enable_embedded_font=false skia_canvaskit_enable_font=false skia_canvaskit_enable_paragraph=false skia_canvaskit_enable_pathops=false skia_enable_bentleyottmann=true skia_enable_fontmgr_android=false skia_canvaskit_enable_pathops=false skia_use_dng_sdk=false skia_enable_fontmgr_custom_empty=false skia_enable_skottie=true skia_enable_pdf=false skia_enable_skparagraph=true skia_enable_skshaper=true skia_enable_skshaper_tests=false skia_enable_api_available_macro=false skia_compile_modules=true skia_enable_svg=true skia_use_dng_sdk=false skia_use_egl=true skia_use_expat=false skia_use_icu=false skia_use_perfetto=false skia_use_piex=false skia_use_system_expat=false skia_use_system_icu=false skia_use_wuffs=false skia_use_x11=false skia_use_xps=false'
+        run: bin/gn gen out/Shared --args='ar = "ar" extra_cflags = ["-ffunction-sections", "-fdata-sections", "-fno-rtti", "-flto", "-Oz", "-Wl,--gc-sections"] is_component_build=true is_debug=false is_official_build=true paragraph_gms_enabled=false skia_use_system_harfbuzz=false skia_use_system_freetype2=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false paragraph_tests_enabled=false skia_canvaskit_enable_alias_font=false skia_canvaskit_enable_canvas_bindings=false skia_canvaskit_enable_effects_deserialization=false skia_canvaskit_enable_embedded_font=false skia_canvaskit_enable_font=false skia_canvaskit_enable_paragraph=false skia_canvaskit_enable_pathops=false skia_enable_bentleyottmann=true skia_enable_fontmgr_android=false skia_canvaskit_enable_pathops=false skia_use_dng_sdk=false skia_enable_fontmgr_custom_empty=false skia_enable_skottie=true skia_enable_pdf=false skia_enable_skparagraph=true skia_enable_skshaper=true skia_enable_skshaper_tests=false skia_enable_api_available_macro=false skia_compile_modules=true skia_enable_svg=true skia_use_dng_sdk=false skia_use_egl=true skia_use_expat=false skia_use_icu=false skia_use_perfetto=false skia_use_piex=false skia_use_system_expat=false skia_use_system_icu=false skia_use_wuffs=false skia_use_x11=false skia_use_xps=false'
         working-directory: skia
 
       - name: Build
-        run: C=clang CXX=clang++ ninja -C out/Shared
+        run: ninja -C out/Shared
         working-directory: skia
 
       - name: Strip builds
