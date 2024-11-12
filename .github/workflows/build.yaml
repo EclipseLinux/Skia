@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Ninja
-        run: sudo sed -i 's/jammy/oracular/g' /etc/apt/sources.list && sudo apt-get update && sudo apt-get install ninja-build gcc-14 g++-14 binutils llvm-dev lld libglu1-mesa-dev freeglut3-dev mesa-common-dev
+        run: sudo sed -i 's/jammy/oracular/g' /etc/apt/sources.list && sudo apt-get update && sudo apt-get install ninja-build gcc-14 g++-14 binutils llvm-dev lld libglu1-mesa-dev freeglut3-dev mesa-common-dev libfreetype6-dev libharfbuzz-dev libpng-dev libjpeg-turbo8-dev libwebp-dev
         
       - name: Clone Skia repo
         run: |
