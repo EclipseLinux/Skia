@@ -15,12 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Ninja
-        run: sudo apt-get update && sudo apt-get install ninja-build clang llvm-dev lld
+        run: sudo apt-get update && sudo apt-get install ninja-build build-essential llvm-dev lld
         
       - name: Clone Skia repo
         run: |
           git clone https://skia.googlesource.com/skia.git
-          cd skia && cc --version
+          cd skia && cc --version && ld --version
       
       - name: Fetch dependencies
         run: python3 tools/git-sync-deps && python3 bin/fetch-ninja && python3 bin/fetch-gn
