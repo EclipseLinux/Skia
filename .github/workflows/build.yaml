@@ -16,11 +16,17 @@ jobs:
     steps:
       - name: Install Ninja
         run: sudo sed -i 's/jammy/oracular/g' /etc/apt/sources.list && sudo apt-get update && sudo apt-get install ninja-build gcc-14 binutils llvm-dev lld
+
+      - name: Setup Cpp
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: gcc
+          ninja: true
         
       - name: Clone Skia repo
         run: |
           git clone https://skia.googlesource.com/skia.git
-          cd skia && cc --version && ld --version
+          cd skia && gcc --version && ld --version
       
       - name: Fetch dependencies
         run: python3 tools/git-sync-deps && python3 bin/fetch-ninja && python3 bin/fetch-gn
