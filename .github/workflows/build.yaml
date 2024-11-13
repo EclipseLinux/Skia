@@ -14,6 +14,9 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
     steps:
+      - name: Log Information
+        run: echo "Building skia for ${{ runner.os }} ${{ runner.arch }} at $(date '+%d.%m.%Y')"
+        
       - name: Install Ninja
         run: sudo sed -i 's/jammy/oracular/g' /etc/apt/sources.list && sudo apt-get update && sudo apt-get install ninja-build gcc-14 g++-14 binutils llvm-dev lld libglu1-mesa-dev freeglut3-dev mesa-common-dev libfreetype6-dev libharfbuzz-dev libpng-dev libjpeg-turbo8-dev libwebp-dev
         
@@ -53,7 +56,7 @@ jobs:
         uses: vimtor/action-zip@v1.2
         with:
           files: skia/out/Shared
-          dest: 'skia-${{ runner.os }}-x64.zip'
+          dest: 'skia-${{ runner.os }}-${{ runner.arch }}.zip'
 
       - name: Release binaries
         uses: softprops/action-gh-release@v2
@@ -61,5 +64,5 @@ jobs:
           make_latest: 'true'
           tag_name: ${{ env.DATE }}
           files: |
-            skia-${{ runner.os }}-x64.zip 
+            skia-${{ runner.os }}-${{ runner.arch }}.zip 
             skia-includes.zip
