@@ -36,6 +36,12 @@ jobs:
         with:
           files: skia/include
           dest: 'skia-includes.zip'
+
+      - name: Packaging modules
+        uses: vimtor/action-zip@v1.2
+        with:
+          files: skia/modules
+          dest: 'skia-modules.zip'
       
       - name: Fetch dependencies
         run: python3 tools/git-sync-deps && python3 bin/fetch-ninja && python3 bin/fetch-gn
@@ -72,3 +78,4 @@ jobs:
           files: |
             skia-${{ steps.string.outputs.lowercase }}.zip 
             skia-includes.zip
+            skia-modules.zip
