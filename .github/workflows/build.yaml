@@ -24,7 +24,7 @@ jobs:
         run: echo "Building skia for ${{ steps.string.outputs.lowercase }} at $(date '+%d.%m.%Y')"
         
       - name: Install Ninja
-        run: sudo add-apt-repository ppa:plucky/libicu && sudo sed -i 's/jammy/oracular/g' /etc/apt/sources.list && sudo apt-get update && sudo apt-get install ninja-build gcc-14 g++-14 binutils llvm-dev lld libglu1-mesa-dev freeglut3-dev mesa-common-dev libfreetype6-dev libharfbuzz-dev libpng-dev libjpeg-turbo8-dev libwebp-dev libfontconfig-dev libicu-dev libharfbuzz-icu0 libicu76
+        run: sudo sed -i 's/jammy/oracular/g' /etc/apt/sources.list && echo "deb http://archive.ubuntu.com/ubuntu plucky main universe multiverse" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt-get install ninja-build gcc-14 g++-14 binutils llvm-dev lld libglu1-mesa-dev freeglut3-dev mesa-common-dev libfreetype6-dev libharfbuzz-dev libpng-dev libjpeg-turbo8-dev libwebp-dev libfontconfig-dev libicu-dev libharfbuzz-icu0 libicu76
         
       - name: Clone Skia repo
         run: |
