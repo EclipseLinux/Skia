@@ -57,10 +57,10 @@ jobs:
 
       - name: Create bundle
         run: |
-          mkdir -p bundle/include bundle/lib
-          cp -r skia/include bundle/include/
-          cp -r skia/modules bundle/include/
-          cp -r skia/src bundle/include/
+          mkdir -p bundle/skia bundle/lib
+          cp -r skia/include bundle/skia
+          cp -r skia/modules bundle/skia
+          cp -r skia/src bundle/skia
           cp skia/out/Static/*.a bundle/lib/ || true
 
           cat > bundle/meson.build <<'EOF'
@@ -75,7 +75,7 @@ jobs:
           )
           EOF
           
-          zip -r skia-prebuilt-${{ steps.string.outputs.lowercase }}.zip bundle
+          zip -r skia-prebuilt-${{ steps.string.outputs.lowercase }}.zip bundle/skia bundle/lib bundle/meson.build
         working-directory: .
 
       - name: Check if bundle was created
