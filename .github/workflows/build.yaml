@@ -21,7 +21,7 @@ jobs:
           string: '${{ runner.os }}-${{ runner.arch }}'
           
       - name: Log Information
-        run: echo "Building skia for ${{ steps.string.outputs.lowercase }} at $(date '+%d.%m.%Y')"
+        run: echo "Building skia for ${{ steps.string.outputs.lowercase }} at $(date '+%d.%m.%Y')" && echo "DATE=$(date '+%d.%m.%Y')" >> $GITHUB_ENV
         
       - name: Install Ninja & Deps
         run: |
