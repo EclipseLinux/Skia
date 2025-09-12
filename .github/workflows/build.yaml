@@ -68,7 +68,7 @@ jobs:
 
           skia_dep = declare_dependency(
           	include_directories: skia_inc,
-          	dependencies: [skia_lib],
+          	dependencies: [skia_lib, dependency('libpng'), dependency('fontconfig'), dependency('libwebpdemux'), dependency('libwebp'), dependency('libjpeg'), dependency('freetype2'),],
           )
 
           meson.override_dependency('skia', skia_dep)
