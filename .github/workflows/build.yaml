@@ -66,12 +66,13 @@ jobs:
           cat > bundle/meson.build <<'EOF'
           project('skia-prebuilt', 'cpp')
 
-          skia_inc = include_directories('skia')
+          skia_inc = include_directories('include')
+          cc = meson.get_compiler('cpp')
           skia_lib = cc.find_library('skia', dirs: 'lib')
 
           skia_dep = declare_dependency(
-            include_directories: skia_inc,
-            dependencies: [skia_lib],
+          	include_directories: skia_inc,
+          	dependencies: [skia_lib],
           )
           EOF
           
