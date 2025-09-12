@@ -57,7 +57,7 @@ jobs:
           cp -r skia/include bundle/skia
           cp -r skia/modules bundle/skia
           cp -r skia/src bundle/skia
-          cp skia/out/Static/*.a bundle/lib/ || true
+          cp skia/out/Static/*.so bundle/lib/ || true
 
           cat > bundle/meson.build <<'EOF'
           project('skia-prebuilt', 'cpp')
