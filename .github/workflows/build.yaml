@@ -51,10 +51,6 @@ jobs:
         run: CC=gcc-14 CXX=g++-14 ninja -C out/Static
         working-directory: skia
 
-      - name: Strip Static
-        run: strip -s out/Static/*.a || true
-        working-directory: skia
-
       - name: Create bundle
         run: |
           mkdir -p bundle/skia bundle/lib
