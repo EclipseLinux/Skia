@@ -64,12 +64,14 @@ jobs:
 
           skia_inc = include_directories('skia')
           cc = meson.get_compiler('cpp')
-          skia_lib = cc.find_library('skia', dirs: 'lib')
+          skia_lib = cc.find_library('skia', dirs: meson.current_source_dir() / 'lib')
 
           skia_dep = declare_dependency(
           	include_directories: skia_inc,
           	dependencies: [skia_lib],
           )
+
+          meson.override_dependency('skia', skia_dep)
           EOF
           
           zip -r skia-prebuilt-${{ steps.string.outputs.lowercase }}.zip bundle/skia bundle/lib bundle/meson.build
