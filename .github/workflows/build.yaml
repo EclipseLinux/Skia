@@ -53,6 +53,7 @@ jobs:
 
       - name: Strip binaries
         run: strip --strip-all out/Shared/libskia.so
+        working-directory: skia
 
       - name: Create bundle
         run: |
