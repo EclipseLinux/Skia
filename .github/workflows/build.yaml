@@ -66,7 +66,7 @@ jobs:
           cat > bundle/meson.build <<'EOF'
           project('skia-prebuilt', 'cpp')
 
-          skia_inc = include_directories('skia')
+          skia_inc = include_directories(['skia', 'skia/include', 'skia/src'])
           cc = meson.get_compiler('cpp')
           skia_lib = cc.find_library('skia', dirs: meson.current_source_dir() / 'lib')
 
