@@ -2,7 +2,7 @@ name: Build Skia on Update
 
 on:
   schedule:
-    - cron: '0 0 * * 1'  # Runs weekly
+    - cron: '0 0 1 * *'  # Runs monthly
   workflow_dispatch:
   push:
 
@@ -19,36 +19,44 @@ jobs:
         uses: ASzc/change-string-case-action@v6
         with:
           string: '${{ runner.os }}-${{ runner.arch }}'
-          
+
       - name: Log Information
-        run: echo "Building skia for ${{ steps.string.outputs.lowercase }} at $(date '+%d.%m.%Y')" && echo "DATE=$(date '+%d.%m.%Y')" >> $GITHUB_ENV
-        
+        run: |
+          echo "Building skia for ${{ steps.string.outputs.lowercase }} at $(date '+%d.%m.%Y')"
+          echo "DATE=$(date '+%d.%m.%Y')" >> $GITHUB_ENV
+
+      - name: Install Clang (latest)
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 22
+          sudo apt-get install -y clang-22 lld-22
+
       - name: Install Ninja & Deps
         run: |
-          sudo sed -i 's/jammy/oracular/g' /etc/apt/sources.list
-          echo "deb http://archive.ubuntu.com/ubuntu plucky main universe multiverse" | sudo tee -a /etc/apt/sources.list
-          sudo apt-get update && sudo apt dist-upgrade && add-apt-repository ppa:ubuntu-toolchain-r/test
-          sudo apt-get install ninja-build build-essential gcc-16 g++-16 binutils llvm-dev lld \
+          sudo apt-get update
+          sudo apt-get install -y ninja-build build-essential binutils \
             libglu1-mesa-dev freeglut3-dev mesa-common-dev \
             libfreetype6-dev libegl-dev libegl1 libegl1-mesa-dev \
             libharfbuzz-dev libpng-dev libjpeg-turbo8-dev libwebp-dev \
-            libfontconfig-dev libicu-dev libharfbuzz-icu0 libicu76
-        
+            libfontconfig-dev libicu-dev libharfbuzz-icu0
+
       - name: Clone Skia repo
         run: |
-          git clone https://skia.googlesource.com/skia.git
-          cd skia && g++ --version && ld --version
+          git clone -b chrome/m150 --single-branch https://skia.googlesource.com/skia.git
+          cd skia && clang-22 --version && ld.lld-22 --version
 
       - name: Fetch dependencies
         run: python3 tools/git-sync-deps && python3 bin/fetch-ninja && python3 bin/fetch-gn
         working-directory: skia
 
       - name: Configure Skia (Shared)
-        run: bin/gn gen out/Shared --args='ar = "ar" cc="gcc-16" cxx="g++-16" skia_enable_graphite=true skia_use_vulkan=true extra_cflags = ["-ffunction-sections", "-fdata-sections", "-fPIC", "-fno-rtti", "-flto", "-Oz", "-Wl,--gc-sections", "-Wl,-Bsymbolic", "-fno-unwind-tables", "-fno-asynchronous-unwind-tables", "-fvisibility=default"] is_component_build=true is_debug=false is_official_build=true paragraph_gms_enabled=false skia_use_system_harfbuzz=true skia_use_system_freetype2=true skia_use_system_libjpeg_turbo=true skia_use_system_libpng=true skia_use_system_libwebp=true skia_use_system_zlib=true paragraph_tests_enabled=false skia_canvaskit_enable_canvas_bindings=false skia_canvaskit_enable_effects_deserialization=false skia_canvaskit_enable_embedded_font=false skia_canvaskit_enable_font=false skia_canvaskit_enable_paragraph=false skia_canvaskit_enable_pathops=false skia_enable_bentleyottmann=true skia_enable_fontmgr_android=false skia_canvaskit_enable_pathops=false skia_use_dng_sdk=false skia_enable_fontmgr_custom_empty=true skia_enable_skottie=true skia_enable_pdf=false skia_enable_skparagraph=true skia_enable_skshaper=true skia_enable_skshaper_tests=false skia_enable_api_available_macro=false skia_compile_modules=true skia_enable_svg=true skia_use_dng_sdk=false skia_use_egl=true skia_use_expat=false skia_use_icu=true skia_use_perfetto=false skia_use_piex=false skia_use_system_icu=true skia_use_icu4x=false skia_enable_skunicode=true skia_use_wuffs=false skia_use_x11=false skia_use_xps=false'
+        run: |
+          bin/gn gen out/Shared --args='ar="llvm-ar-22" cc="clang-22" cxx="clang++-22" skia_enable_graphite=true skia_use_vulkan=true extra_cflags=["-ffunction-sections", "-fdata-sections", "-fPIC", "-fno-rtti", "-flto=thin", "-Oz", "-Wl,--gc-sections", "-Wl,-Bsymbolic", "-fno-unwind-tables", "-fno-asynchronous-unwind-tables", "-fvisibility=default", "-fuse-ld=lld"] is_component_build=true is_debug=false is_official_build=true skia_use_system_harfbuzz=true skia_use_system_freetype2=true skia_use_system_libjpeg_turbo=true skia_use_system_libpng=true skia_use_system_libwebp=true skia_use_system_zlib=true skia_enable_bentleyottmann=true skia_enable_fontmgr_android=false skia_use_dng_sdk=false skia_enable_fontmgr_custom_empty=true skia_enable_skottie=true skia_enable_pdf=false skia_enable_skparagraph=true skia_enable_skshaper=true skia_enable_skshaper_tests=false skia_enable_api_available_macro=false skia_compile_modules=true skia_enable_svg=true skia_use_egl=true skia_use_expat=false skia_use_icu=true skia_use_perfetto=false skia_use_piex=false skia_use_system_icu=true skia_use_icu4x=false skia_enable_skunicode=true skia_use_wuffs=false skia_use_x11=false skia_use_xps=false'
         working-directory: skia
 
       - name: Build Skia (Shared)
-        run: CC=gcc-16 CXX=g++-16 ninja -C out/Shared
+        run: CC=clang-22 CXX=clang++-22 ninja -C out/Shared
         working-directory: skia
 
       - name: Strip binaries
@@ -77,7 +85,7 @@ jobs:
 
           meson.override_dependency('skia', skia_dep)
           EOF
-          
+
           zip -r skia-prebuilt-${{ steps.string.outputs.lowercase }}.zip bundle/skia bundle/lib bundle/meson.build
         working-directory: .
 
