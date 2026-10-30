@@ -42,7 +42,7 @@ jobs:
 
       - name: Clone Skia repo
         run: |
-          git clone -b chrome/m150 --single-branch https://skia.googlesource.com/skia.git
+          git clone -b main --single-branch https://skia.googlesource.com/skia.git
           cd skia && clang-22 --version && ld.lld-22 --version
 
       - name: Fetch dependencies
